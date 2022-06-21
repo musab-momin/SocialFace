@@ -1,0 +1,228 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+:root {
+  /* colors */
+  --blue700: #2a62b7;
+  --grey500: #707070;
+  --white: #ffffff;
+  --textcolor: #404b69;
+  --red500: #e91e63;
+  --purple400: #aa94de;
+  --purple500: #8870c9;
+  --green500: #48a44c;
+  --purple300: #c4afee;
+  --green600: #418945;
+  --purple600: #6751ac;
+  --pink600: #d53674;
+  --red600: #d60c51;
+  --cyan500: #22c2d6;
+  --cyan600: #15a9bb;
+  --blue500: #54a9ff;
+  --blue600: #3d84db;
+  --yellow600: #db8f42;
+  --yellow700: #b76c2d;
+  --greyalpha60: #d3d3d3;
+  --pink500: #ea4c89;
+  --yellow500alpha20: #fff0de;
+  --green500alpha20: #e7f3e8;
+  --purple500alpha20: #e0dcee;
+  --cyan500alpha20: #d2f2f6;
+  --blue500alpah20: #dcedff;
+  --red500alpha20: #fad1df;
+  --pink500alpha20: #fbdbe7;
+  --greyalpha70: #c7c7c7;
+  --greyalpha80: #8d8d8d;
+  --greyalpha40: #f5f5f5;
+  --icecolor: #939cb3;
+  --purple700: #4b3890;
+  --ebonclay: #202337;
+  --greytextdarkmode: #e2e2e2;
+  --linkcolor: #6c63ff;
+  --yellow500: #ffb55b;
+  --green700: #1c8d53;
+  --purple200: #ddcdf9;
+  --green100: #e9f3ea;
+  --purple_100: #efeaf7;
+  --green500alpha30: #c7e3c9;
+  --yellow500alpha30: #ffe8cd;
+  --red500alpha30: #f8bacf;
+  --red500alpha40: #f6a4c0;
+  --green500alpha40-: #b5dab6;
+  --yellow500alpha40: #ffe1bd;
+  --purple500alpha40: #cfc6e9;
+  --purple500alpha30: #dbd4ef;
+  --primary-color: #e74e35;
+  --bg-color: #fafafa;
+  --text-color: #232323;
+
+  /* font-sizes */
+  --fs-800: 3.5rem;
+  --fs-700: 1.5rem;
+  --fs-600: 1rem;
+  --fs-500: 1rem;
+  --fs-400: 0.9375rem;
+  --fs-300: 1rem;
+  --fs-200: 0.875rem;
+
+  /* font-families */
+  --ff-popins: 'Poppins', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+/* Reset margins and paddings */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+figure,
+picture {
+  margin: 0;
+  padding: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  font-weight: 400;
+}
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+body {
+  font-family: var(--ff-popins) sans-serif;
+  font-size: var(--fs-400);
+  color: var(--textcolor);
+  line-height: 1.5;
+  min-height: 100vh;
+  background: var(--bg-color);
+}
+img,
+picutre {
+  max-width: 100%;
+  display: block;
+}
+li {
+  list-style: none;
+}
+a{
+    text-decoration: none;
+}
+.main{
+  display: flex;
+}
+.main__design-left{
+  position: relative;
+  left: -10%;
+  width: 35%;
+  height: 80vh;
+  background-image: linear-gradient(135deg, #f79f84 0%,  var(--primary-color) 100%);
+  border-bottom-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+}
+
+.main__desing-para{
+  position: absolute;
+  top: 50%;
+  left: 90%;
+  width: 100%;
+  transform: translate(-50%, -90%);
+  color: var(--white);
+  /* border: 1px solid white; */
+}
+.main__desing-para #title{
+  min-width: max-content;
+  font-size: 3rem;
+  color: var(--white);
+  font-weight: 500;
+}
+#slogon{
+  position: absolute;
+  right: 50%;
+  bottom: -15%;
+}
+
+.main__design-right{
+  position: fixed;
+  right: -15%;
+  bottom: 0;
+  width: 35%;
+  height: 80vh;
+  background-image: linear-gradient(135deg, #f79f84 0%,  var(--primary-color) 100%);
+  border-top-right-radius: 50%;
+  border-top-left-radius: 50%;
+  opacity: .2;
+}
+
+.frm__title{
+  text-align: center;
+  font-size: var(--fs-700);
+}
+.frm__title span{
+  margin: 0 .3em;
+  padding: 0 .5em;
+  background: var(--primary-color);
+  color: var(--white);
+}
+
+
+
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%;
+  border-radius: 5px;
+
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.modal-mssg{
+    font-size: 1.2rem;
+    color: var(--red500);
+}

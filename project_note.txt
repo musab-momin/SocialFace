@@ -1,0 +1,1 @@
+insert pillow in requirments.txt file

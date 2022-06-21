@@ -1,0 +1,270 @@
+{% extends 'socialmedia/mainbase.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock title %}
+
+
+{% block profileimage %}
+
+    <img src="{{profile_image_url.url }}" alt="#" class="nav__icon" style='border-radius: 50%;' />
+{% endblock profileimage %}
+
+{% block style %}
+<link rel='stylesheet' href=" {% static 'socialmedia/styles/profilepage.css' %} " />
+<link rel='stylesheet' href=" {% static 'socialmedia/styles/index.css' %} " />
+{% endblock style %}
+
+{% block body %}
+<header>
+
+    <div class="profile-container">
+
+        <div class="profile">
+
+            <div class="profile-image">
+
+                <img src="{{ active_user.profile_pic.url }}" alt="">
+
+            </div>
+
+            <div class="profile-user-settings">
+
+                <h1 class="profile-user-name">{{ active_user.user.username }}</h1>
+
+                {% if is_allowed_to_post %}
+                <button class="btn profile-edit-btn" id="editBtn" onclick="activeModal(this.id)">Edit Profile</button>
+                <div id="editModal" class="modal">
+
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        {% for mssg in messages %}
+                            <p class='modal-mssg'> {{ mssg }} </p>
+                        {% endfor %}
+                        <span class="close" id="editSpan"  onclick="closeModal(this.id)">&times;</span>
+                        <form action="{% url 'socialmedia:UpdateProfile' %}" method="post" enctype="multipart/form-data" class="frm">
+                            {% csrf_token %}
+                          
+                            <div class="frm__row">
+                                <label for="name" class="frm__labl">Name</label>
+                                <input type="text" name="name" id="name" class="frm__inp" value="{{ active_user.user.username }}">
+                            </div>
+                            <div class="frm__row">
+                                <label for="email" class="frm__labl">Email</label>
+                                <input type="email" name="email" id="email" class="frm__inp" value="{{ active_user.user.email }}">
+                            </div>
+                            <div class="frm__row" style="display: flex; flex-direction: row; justify-content: space-between;">
+                                <div class="frm__row--special">
+                                    <!-- <label for="dob" class="frm__labl">Date of birth</label> -->
+                                    <input type="date" name="dob" id="dob" class="frm__inp" value="{{ active_user.dob }}">
+                                </div>
+                                <div class="frm__row frm__row--special">   
+                                    
+                                    <label for="male" class="frm__labl" style="margin-right: .5em;">Male</label>
+                                    <input 
+                                    type="radio" 
+                                    name="gender" 
+                                    id="male" 
+                                    class="frm__inp" 
+                                    value='male'
+                                    {% if active_user.gender == 'male'  %} checked='checked' {% endif %}
+                                    >
+                                    <label for="female" class="frm__labl" style="margin-left: 2em;">Female</label>
+                                    <input 
+                                    type="radio" 
+                                    name="gender" 
+                                    id="female" 
+                                    class="frm__inp" 
+                                    style="margin-left: .5em;"  
+                                    value='female'
+                                    {% if active_user.gender == 'female'  %} checked='checked' {% endif %}
+                                    >
+                                </div>
+                            </div>
+                           
+                            <div class="frm__row">
+                                <label for="bio" class="frm__labl">Bio</label>
+                                <textarea name="bio" id="bio" cols="7" rows="3" class="frm__txtarea">{{ active_user.bio }}</textarea>
+                            </div>
+                    
+                            <div class="frm__row">
+                                <label for="profile-pic" class="frm__labl">Profile Picture</label>
+                                <input type="file" name="profile-pic" id="profile-pic" class="frm__inp">
+                            </div>
+                            <div class="frm__row">
+                                <button class="frm__btn">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+
+
+                <button class="btn profile-edit-btn" id="postBtn" onclick="activeModal(this.id)">Make post</button>
+                <!-- The Modal -->
+                <div id="postModal" class="modal">
+
+                    <!-- Modal content -->
+                    <div class="modal-content" style='width: 30%'>
+                        <span class="close" id="postSpan"  onclick="closeModal(this.id)">&times;</span>
+                        <form action="{% url 'socialmedia:MakePost' %}" method="post" enctype="multipart/form-data" class="frm"> 
+                            {% csrf_token %}
+                            <div class="frm__row">
+                                <label for="profile-pic" class="frm__labl">Image</label>
+                                <input type="file" name="post_image" id="profile-pic" class="frm__inp" required>
+                            </div>
+                           
+                            <div class="frm__row">
+                                <label for="caption" class="frm__labl">Caption</label>
+                                <textarea name="caption" id="caption" cols="5" rows="3" class="frm__txtarea"></textarea>
+                            </div>
+                    
+                          
+                            <div class="frm__row">
+                                <button class="frm__btn">Post</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                {% else %}
+                    {% if is_already_following %}
+                        <a href={% url 'socialmedia:HandleFollowers' logedin_user.user.id active_user.user.id %} class="btn profile-edit-btn" id="postBtn">
+                            Unfollow
+                        </a>
+                    {% else %}
+                        <a href={% url 'socialmedia:HandleFollowers' logedin_user.user.id active_user.user.id %} class="btn profile-edit-btn" id="postBtn">
+                            Follow
+                        </a>
+                    {% endif %}
+                {% endif %}
+
+               
+                <button class="btn profile-settings-btn" aria-label="profile settings"><i class="fas fa-cog"
+                        aria-hidden="true"></i></button>
+
+            </div>
+
+            <div class="profile-stats">
+
+                <ul>
+                    <li><span class="profile-stat-count">{{ posts_count }}</span> posts</li>
+                    <li><span class="profile-stat-count">{{ followers_count }}</span> followers</li>
+                    <li><span class="profile-stat-count">{{ following_count }}</span> following</li>
+                </ul>
+
+            </div>
+
+            <div class="profile-bio">
+
+                <p><span class="profile-real-name"></span> {{ active_user.bio }}</p>
+
+            </div>
+
+        </div>
+        <!-- End of profile section -->
+
+    </div>
+    <!-- End of container -->
+
+</header>
+
+    <hr style="width: 75%; margin: 0 auto;" />
+    <br />
+    <!-- End of container -->
+
+    <main>
+
+
+        <div class="profile-container">
+            {% if posts %}
+            <div class="gallery">
+                {% for post in posts reversed %}
+                
+                <div class="gallery-item" tabindex="0">
+    
+                    <img 
+                    src="{{ post.post_image.url }}" class="gallery-image" alt="">
+    
+                    <div class="gallery-item-info">
+    
+                        <ul style="display:flex; flex-direction: row;">
+                            <li class="gallery-item-likes" style="display:flex;flex-direction: row;">
+                                <div>
+                                    <span class="visually-hidden">Likes:</span>
+                                </div>
+                                <div>
+                                    <img src="{% static 'socialmedia/assets/images/like.png' %}" alt="#"/ style="width: 20px; height: 20px" />
+                                    {{ post.likes }}
+                                </div>
+                               
+                            </li>
+                                <li class="gallery-item-likes" style="display:flex; flex-direction: row;">
+                                    <div>
+                                        <span class="visually-hidden">Comments:</span>
+                                    </div>
+                                    <div>
+                                        <img src="{% static 'socialmedia/assets/images/comments.png' %}" alt="#" style="width: 20px; height: 20px"/>
+                                        {{ 5 }}
+                                        
+                                        
+                                    </div>
+                                   
+                                </li>
+                                
+                            
+                        </ul>
+    
+                    </div>
+    
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+                <div style="display:flex; justify-content: center">
+                    <h1 style="margin: 2em"> You haven't made any post </h1>
+                </div>
+            {% endif %}
+           
+            <!-- End of gallery -->
+    
+            
+    
+        </div>
+        <!-- End of container -->
+    
+    </main>
+<script>
+    let modal = null;
+
+    // Get the button that opens the modal
+    let postBtn = document.getElementById("postBtn");
+    let editBtn = document.getElementById("editBtn");
+    
+    // Get the <span> element that closes the modal
+    let span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+    function activeModal (id) {
+        if(id === "postBtn"){
+            modal = document.getElementById("postModal");
+        }else if(id === 'editBtn'){
+            modal = document.getElementById("editModal");
+        }
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    function closeModal(id) {
+        console.log(modal.id);
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+{% endblock body %}

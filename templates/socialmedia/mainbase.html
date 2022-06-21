@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block title %}{% endblock title %} </title>
+    <link rel='stylesheet' href=" {% static 'socialmedia/styles/mainbase.css' %} "/>
+    <link rel='stylesheet' href=" {% static 'socialmedia/styles/base.css' %} "/>
+    {% block style %}{% endblock style %}
+</head>
+<body>
+    <header class="header">
+            <div class="header__logo">
+                <a href="{% url 'socialmedia:Home' %}" style="color: black"><h1 class="frm__title" style='text-align: left'>Social<span>Face</span></h1></a>
+            </div>
+            <nav class="nav">
+                <ul class="nav__ul">
+                    <li class="nav__li" style="position: relative; width: 50%"> 
+                        <form action="{% url 'socialmedia:SearchUser' %}" method="post" id='search-frm'>
+                            {% csrf_token %}
+                            <input type="search" name="searched_txt" placeholder='Search' id="search_txt" class='nav__search' >
+                        </form>
+                        <div class='search-suggestion'>
+                            {% comment %} <button class='search-suggestion-btn'>musab_5k</button>
+                            <button class='search-suggestion-btn'>lady_mariyam</button> {% endcomment %}
+                        </div>
+                    </li>
+                    <li class="nav__li">
+                        <a href="{% url 'socialmedia:Explore' %}" > <img src="{% static 'socialmedia/assets/images/home.png' %}" alt="#" class="nav__icon" /> </a>
+                    </li>
+                    <li class="nav__li">
+                        <a href="" nav__icon>
+                            <img src="{% static 'socialmedia/assets/images/message.png' %}" alt="#" class="nav__icon" />
+                        </a>
+                    </li>
+                    <li class="nav__li">
+                        <a href="{% url 'socialmedia:GetProfile'%}" class="nav__icon">
+                            {% block profileimage %}{% endblock profileimage %}
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+    </header>
+    {% if messages %}
+        {% for mssg in messages %}
+        <div class="message-box active">
+            <p>{{ mssg }}</p>
+        </div>
+        {% endfor %}
+    {% endif %}
+    {% block body %}
+
+    {% endblock body %}
+    <script>
+        document.getElementById('search_txt').addEventListener('keypress', (eve)=>{
+            if (eve.which == 13){
+                eve.preventDefault()
+                document.getElementById('search-frm').submit()
+            }
+        })
+
+    </script>
+    <script src='{% static 'socialmedia/js/search.js' %}'></script>
+</body>
+</html>

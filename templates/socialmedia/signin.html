@@ -1,0 +1,38 @@
+{% extends 'socialmedia/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock title %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static 'socialmedia/styles/index.css' %}">
+{% endblock stylesheet %}
+{% block body %}
+
+{% for mssg in messages  %}
+<div class='mssg danger'>
+    <p> {{ mssg }}</p>
+</div>
+{% endfor %}
+
+    <article class="main__art" style="height: 450px;">
+        <form action="{% url 'socialmedia:Signin' %}" method='post' class="frm">
+            {% csrf_token %}
+            <div class="frm__row">
+                <h1 class="frm__title">Social<span>Face</span></h1>
+            </div>
+            <div class="frm__row">
+                <label for="name" class="frm__labl">Name</label>
+                <input type="text" name="name" id="name" class="frm__inp">
+            </div>
+            <div class="frm__row">
+                <label for="password" class="frm__labl">Password</label>
+                <input type="password" name="password" id="password" class="frm__inp">
+            </div>
+            <div class="frm__row">
+                <button class="frm__btn">Submit</button>
+            </div>
+        </form>
+        <div class="main__dialog-box">
+            <p>Don't have an account? <span><a href="{% url 'socialmedia:Signup' %}" style="color: var(--primary-color); font-weight: 500;">Sign Up</a></span> </p>
+        </div>
+    </article>
+
+{% endblock body %}

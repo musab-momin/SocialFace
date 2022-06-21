@@ -1,0 +1,65 @@
+{% extends 'socialmedia/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock title %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static 'socialmedia/styles/index.css' %}">
+{% endblock stylesheet %}
+{% block body %}
+    {% for mssg in messages  %}
+    <div class='mssg'>
+        <p> {{ mssg }}</p>
+    </div>
+    {% endfor %}
+<article class="main__art"  style="margin-top: 2em; width: 27%;">
+    <form action="{% url 'socialmedia:Signup' %}" method="post" enctype="multipart/form-data" class="frm">
+        {% csrf_token %}
+        <div class="frm__row">
+            <h1 class="frm__title">Register</h1>
+        </div>
+        <div class="frm__row">
+            <label for="name" class="frm__labl">Name</label>
+            <input type="text" name="name" id="name" class="frm__inp">
+        </div>
+        <div class="frm__row">
+            <label for="email" class="frm__labl">Email</label>
+            <input type="email" name="email" id="email" class="frm__inp">
+        </div>
+        <div class="frm__row">
+            <label for="password" class="frm__labl">Password</label>
+            <input type="password" name="password" id="name" class="frm__inp">
+        </div>
+        <div class="frm__row" style="display: flex; flex-direction: row; justify-content: space-between;">
+            <div class="frm__row--special">
+                <!-- <label for="dob" class="frm__labl">Date of birth</label> -->
+                <input type="date" name="dob" id="dob" class="frm__inp">
+            </div>
+            <div class="frm__row frm__row--special">   
+                <label for="male" class="frm__labl" style="margin-right: .5em;">Male</label>
+                <input type="radio" name="gender" id="male" class="frm__inp" value='male'>
+                <label for="female" class="frm__labl" style="margin-left: 2em;">Female</label>
+                <input type="radio" name="gender" id="female" class="frm__inp" style="margin-left: .5em;"  value='female'>
+            </div>
+        </div>
+       
+        <div class="frm__row">
+            <label for="bio" class="frm__labl">Bio</label>
+            <textarea name="bio" id="bio" cols="7" rows="3" class="frm__txtarea"></textarea>
+        </div>
+
+        <div class="frm__row">
+            <label for="profile-pic" class="frm__labl">Profile Picture</label>
+            <input type="file" name="profile-pic" id="profile-pic" class="frm__inp">
+        </div>
+        <div class="frm__row">
+            <button class="frm__btn">Submit</button>
+        </div>
+    </form>
+    <div class="main__dialog-box" style="margin-bottom: 1em;">
+        <p>Already have an account? 
+            <span>
+                <a href="{% url 'socialmedia:Signin' %}" style="color: var(--primary-color); font-weight: 500;">Sign in</a>
+            </span> 
+        </p>
+    </div>
+</article>
+{% endblock body %}

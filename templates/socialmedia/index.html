@@ -1,0 +1,167 @@
+{% extends 'socialmedia/mainbase.html' %}
+{% load static %}
+{% block title %}
+    {{ title }} 
+{% endblock title %}
+{% block style %}
+    <link rel='stylesheet' href=" {% static 'socialmedia/styles/index.css' %} "/>
+{% endblock style %}
+
+{% block profileimage %}
+    <img src=" {{user.profile_pic.url }}" alt="#" class="nav__icon" style='border-radius: 50%;' />
+{% endblock profileimage %}
+
+{% block body %}
+    <article class="article">
+        <div class="container">
+            <section class="posts">
+                {% if post_lst %}
+                    {% for post in post_lst reversed %}
+                    <div class="post" id="{{  post.id }}">
+                    <div class="info">
+                        <div class="user">
+                            <div class="profile-pic">
+                                <img 
+                                src = 
+                                {% for img in profile_pics %}  
+                                    {% if img.id == post.user.id %}
+                                        {{ img.profile_pic.url }}
+                                    {% endif %}
+                                {% endfor %} 
+                                style="border-radius: 50%"
+                                alt="">
+                            </div>
+                            <p class="username">
+                                <a href="{% url 'socialmedia:GetProfileById' post.user.id  %}"> 
+                                {{ post.user.username }}
+                                </a> 
+                            </p>
+                        </div>
+                        <img src="img/option.PNG" class="options" alt="">
+                    </div>
+                    <img src={{ post.post_image.url }} class="post-image" alt="">
+                    <div class="post-content">
+                        <div class="reaction-wrapper">
+                            <a href="{% url 'socialmedia:LikePost' post.id %}" alt="#">
+                                <img src={% static 'socialmedia/assets/images/like.png' %} class="icon" alt="">
+                            </a>
+                            <img 
+                            src={% static 'socialmedia/assets/images/comments.png' %} 
+                            class="icon" 
+                            alt="" 
+                            style='height: 30px'
+                            onclick="fetchComments('{{ post.id }}')"
+                            >
+                            
+                            
+                            <img src="img/send.PNG" class="icon" alt="">
+                            <img src="img/save.PNG" class="save icon" alt="">
+                        </div>
+                        {% if post.likes == 1 %}
+                            <p class="likes">{{ post.likes }} Like</p>
+                        {% else %}
+                            <p class="likes">{{ post.likes }} Likes</p>
+                        {% endif %}
+                       <div style="display: flex; align-items: center;gap: .5em;">
+                        <p style="font-size: 16px; font-weight: bold;">
+                            {{ post.user.username }}:
+                        </p>
+                        <p class="description"> 
+                            {{ post.caption }}
+                        </p>
+                       </div>
+                        <p class="post-time">{{ post.created_on }}</p>
+                    </div>
+                    <div class="comment-wrapper">
+                        <img src="img/smile.PNG" class="icon" alt="">
+                        <form action="{% url 'socialmedia:MakeComment' %}" method="post" class="elt-frm">
+                            {% csrf_token %}
+                            <input type="text" value="{{ post.id }}" name="post_id" hidden>
+                            <input type="text" class="comment-box" placeholder="Add a comment" name="comment">
+                            <button class="comment-btn" type="submit">post</button>
+                        </form>
+                    </div>
+                </div>
+
+                {% endfor %}
+                {% else %}
+                    <h1> You havn't followed anyone yet </h1>
+                {% endif %}
+               
+               
+           
+    </section>
+    <section class="suggestions-sec">
+        <div class="suggestions-btn">
+            <h2> Suggestions </h2>
+            <!-- <button id="btn">Refresh</button> -->
+        </div>
+        <div id="suggestions-parent" style="width: 100%;">
+            {% for suggestion in suggestions %}
+            <div class="suggestions">
+                <div class="suggestions__body">
+                    <img src="{{ suggestion.profile_pic.url }}" alt="#" class='suggestions_pic' />
+                    <div>
+                        <p>{{ suggestion.user.username }}</p>
+                    </div>
+                </div>
+                <div class="suggestions__footer">
+                    <a href="{% url 'socialmedia:GetProfileById' suggestion.user.id %}"> View </a>
+                </div>
+            </div>
+           {% endfor %}
+    
+        </div>
+    </section>
+        </div>
+    </article>
+
+
+    <!-- this is modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content el-modal">
+            <div class='img-div'>
+                <img src="{% static 'socialmedia/assets/images/default-male.jpg' %}" alt="" id="active-post-img"/>
+            </div>
+            <div class='content-div'>
+                <div class="comment-profile">
+                    <img src="{{user.profile_pic.url }}" alt = "#" class="comment-img" id="active-post-profile-img"/>
+                    
+                        <p id="comment-name">{{ user.username }}:</p>
+                        <p id="active-post-caption">this is very long caption</p>
+                    
+                </div>
+                <hr/>
+                <h3 class="com-h3">Comments</h3>
+                <!-- <div class="content-div__comments">
+                    <div class="content-div__comment" style="margin: 1em 0;">
+                        <div class="post-sec">
+                            <img src="{{user.profile_pic.url }}" alt = "#" class="comment-img" />
+                            <p id="comment-name">{{ user.username }}:</p>
+                            <p>I just commented on this post <br /><button class="like-btn">12 likes</button> </p>
+                        </div>
+                    </div>
+                    
+                    
+                </div> -->
+                <div class="comments-sec">
+
+                </div>
+                <!-- <form action="{% url 'socialmedia:MakeComment' %}" method="post" class="elt-frm" style="border: 1px solid crimson;">
+                    {% csrf_token %}
+                    <input type="text" value="{{ post.id }}" name="post_id" hidden>
+                    <input type="text" class="comment-box" placeholder="Add a comment" name="comment">
+                    <button class="comment-btn" type="submit">post</button>
+                </form> -->
+            </div>
+        </div>
+
+    </div>
+    <!-- end of modal -->
+
+    <script src="{% static 'socialmedia/js/index.js' %}"></script>
+   
+
+{% endblock body %}
